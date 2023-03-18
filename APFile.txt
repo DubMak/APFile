@@ -1,0 +1,204 @@
+
+ #Created by Dub Mak. Software is provided "as is," without warranty of any kind, express or implied. User assumes all risk. makawide@gmail.com
+   
+   
+   
+    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
+    
+       
+   Function Get-Folder($initialDirectory="Desktop")
+
+{
+    [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")|Out-Null
+
+    $foldername = New-Object System.Windows.Forms.FolderBrowserDialog
+    $foldername.Description = "Select Folder:"
+   # $foldername.rootfolder = "MyComputer"
+    $foldername.SelectedPath = $initialDirectory
+
+    if($foldername.ShowDialog() -eq "OK")
+    {
+        $folder += $foldername.SelectedPath
+    }
+    return $folder
+}
+    
+    
+    # DEFINE FORM
+    $Form = New-Object System.Windows.Forms.Form
+    $Form.width = 1100
+    $Form.height = 540
+    $Form.Text = "Dub Mak's AP Check Filing"
+    $Font = New-Object System.Drawing.Font("Times New Roman",12)
+    $Form.Font = $Font
+ 
+    # GROUP
+    $MyGroupBox = New-Object System.Windows.Forms.GroupBox
+    $MyGroupBox.Location = '40,30'
+    $MyGroupBox.size = '1000,120'
+
+
+
+    #SEPERATOR ENTRY
+    $SeparatorLabel = New-Object System.Windows.Forms.label
+    $SeparatorLabel.Location = New-Object System.Drawing.Size(50,50)
+    $SeparatorLabel.Size = New-Object System.Drawing.Size(130,20)
+    $SeparatorLabel.Text = "Enter Separator:"
+    $form.Controls.Add($SeparatorLabel)
+    $SeperatorBox = New-Object System.Windows.Forms.TextBox
+    $SeperatorBox.Location = New-Object System.Drawing.Point(335,50)
+    $SeperatorBox.Size = New-Object System.Drawing.Size(40,80)
+    $SeperatorBox.add_TextChanged({$OKButton.Enabled = $true})
+    $form.Controls.Add($SeperatorBox)
+
+
+
+    #AP CHECK LOCATION ENTRY
+    $CheckLocationLabel = New-Object System.Windows.Forms.label
+    $CheckLocationLabel.Location = New-Object System.Drawing.Size(50,80)
+    $CheckLocationLabel.Size = New-Object System.Drawing.Size(200,20)
+    $CheckLocationLabel.Text = "Folder containing AP checks:"
+    $form.Controls.Add($CheckLocationLabel)
+    $CheckLocationHandler = {
+        $_.Data.GetFileDropList() | % {
+            $CheckLocation.Text=$_
+        }
+    }
+    $CheckLocation = New-Object System.Windows.Forms.TextBox
+    $CheckLocation.Location = New-Object System.Drawing.Point(335,80)
+    $CheckLocation.Size = New-Object System.Drawing.Size(700,80)
+    $CheckLocation.Text="Browse or drag and drop folder here"
+    $CheckLocation.AllowDrop = $true
+    $CheckLocation.Add_DragEnter({$_.Effect = [Windows.Forms.DragDropEffects]::Copy})
+    $CheckLocation.Add_DragDrop($CheckLocationHandler)
+    $form.Controls.Add($CheckLocation)
+    $BrowseAPCheckLocation = New-Object System.Windows.Forms.Button  
+    $BrowseAPCheckLocation.Location = New-Object System.Drawing.Point(250,80)  
+    $BrowseAPCheckLocation.Size = New-Object System.Drawing.Size(80,25)  
+    $BrowseAPCheckLocation.Text = 'Browse'  
+    $BrowseAPCheckLocation.add_click({$x = Get-Folder ; $CheckLocation.Text=$x})  
+    $form.Controls.Add($BrowseAPCheckLocation)  
+
+    #DESTINATION FOLDER
+    $CheckDestinationLabel = New-Object System.Windows.Forms.label
+    $CheckDestinationLabel.Location = New-Object System.Drawing.Size(50,110)
+    $CheckDestinationLabel.Size = New-Object System.Drawing.Size(200,20)
+    $CheckDestinationLabel.Text = "Destination Folder:"
+    $form.Controls.Add($CheckDestinationLabel)
+    $CheckDestinationHandler = {
+        $_.Data.GetFileDropList() | % {
+            $CheckDestination.Text=$_
+        }
+    }
+    $CheckDestination = New-Object System.Windows.Forms.TextBox
+    $CheckDestination.Location = New-Object System.Drawing.Point(335,110)
+    $CheckDestination.Size = New-Object System.Drawing.Size(700,80)
+    $CheckDestination.Text="Browse or drag and drop folder here"
+    $CheckDestination.AllowDrop = $true
+    $CheckDestination.Add_DragEnter({$_.Effect = [Windows.Forms.DragDropEffects]::Copy})
+    $CheckDestination.Add_DragDrop($CheckDestinationHandler)
+    $form.Controls.Add($CheckDestination)
+    $BrowseDestination = New-Object System.Windows.Forms.Button  
+    $BrowseDestination.Location = New-Object System.Drawing.Point(250,110)  
+    $BrowseDestination.Size = New-Object System.Drawing.Size(80,25)  
+    $BrowseDestination.Text = 'Browse'  
+    $BrowseDestination.add_click({$x = Get-Folder ; $CheckDestination.Text=$x})  
+    $form.Controls.Add($BrowseDestination)  
+
+
+    #ADD INSTRUCTIONS    
+    $Step1 = New-Object System.Windows.Forms.Label
+    $Step1.Location = New-Object System.Drawing.Point(50,155)
+    $Step1.Size = New-Object System.Drawing.Size(1000,20)
+    $Step1.Text = 'Step 1 - Ensure all of your check files are named in the same pattern and include the same separator between the check number and vendor name.'
+
+    $Step2 = New-Object System.Windows.Forms.Label
+    $Step2.Location = New-Object System.Drawing.Point(50,185)
+    $Step2.Size = New-Object System.Drawing.Size(1000,20)
+    $Step2.Text = 'Step 2 - Enter your separator in the separator field, if your separator has spaces enter the exact number of spaces.'
+
+    $Step3 = New-Object System.Windows.Forms.Label
+    $Step3.Location = New-Object System.Drawing.Point(50,215)
+    $Step3.Size = New-Object System.Drawing.Size(1000,20)
+    $Step3.Text = 'Step 3 - Select or drag and drop the folder containing your check copies.'
+
+    $Step4 = New-Object System.Windows.Forms.Label
+    $Step4.Location = New-Object System.Drawing.Point(50,245)
+    $Step4.Size = New-Object System.Drawing.Size(1000,20)
+    $Step4.Text = 'Step 4 - Select or drag and drop the folder where your vendor folders are.'
+   
+    $Step5 = New-Object System.Windows.Forms.Label
+    $Step5.Location = New-Object System.Drawing.Point(50,275)
+    $Step5.Size = New-Object System.Drawing.Size(1000,20)
+    $Step5.Text = 'Step 5 - Press process and enjoy.'
+        
+    $Legal = New-Object System.Windows.Forms.Label
+    $Legal.Location = New-Object System.Drawing.Point(50,400)
+    $Legal.Size = New-Object System.Drawing.Size(1000,20)
+    $Legal.Text = 'Created by Dub Mak. Software is provided "as is," without warranty of any kind, express or implied. User assumes all risk. makawide@gmail.com'
+
+
+
+    #PROCESS BUTTON
+    $OKButton = new-object System.Windows.Forms.Button
+    $OKButton.Location = '40,450'
+    $OKButton.Size = '100,40' 
+    $OKButton.Text = 'Process'
+    $OKButton.Enabled = $false
+    $OKButton.DialogResult=[System.Windows.Forms.DialogResult]::OK
+ 
+    #CANCEL BUTTON
+    $CancelButton = new-object System.Windows.Forms.Button
+    $CancelButton.Location = '150,450'
+    $CancelButton.Size = '100,40'
+    $CancelButton.Text = "Cancel"
+    $CancelButton.DialogResult=[System.Windows.Forms.DialogResult]::Cancel
+ 
+    #ADD FORM CONTROLS
+    $form.Controls.AddRange(@($MyGroupBox,$OKButton,$CancelButton,$Step1,$Step2,$Step3,$Step4,$Step5,$Legal))
+ 
+
+    
+    # ASSIGN BUTTONS
+    $form.AcceptButton = $OKButton
+    $form.CancelButton = $CancelButton
+ 
+    # ACTIVIATE
+    $form.Add_Shown({$form.Activate()})    
+    
+ 
+    # GET RESULT
+    $dialogResult = $form.ShowDialog()
+ 
+    # RESULT HANDLING
+    if ($dialogResult -eq "OK" -and $CheckDestination.Text.Length -gt 0 -and $SeperatorBox.Text.length -gt 0 -and $CheckLocation.Text.length -gt 0  ){
+       $baseDir = $CheckLocation.Text
+       $completedPDFs = Get-ChildItem "$baseDir\*.pdf" | Where-Object {$_.BaseName -match $SeperatorBox.Text}
+
+    foreach ($item in $completedPDFs) {
+        $filename = $item.basename -split $SeperatorBox.Text, 2
+
+        $vendorname = $filename[1]
+        $folderName = $CheckDestination.Text + "\" + $vendorname
+	   
+    $folderExists = Test-Path -path $folderName
+	if (!$folderExists) {
+        New-Item -Path $folderNAme -ItemType Directory
+    }
+    Move-Item -Path $item -Destination $folderName 
+	
+	
+
+}
+
+    }
+
+    if ($dialogResult -eq "Cancel"){
+
+    exit
+
+    }
+
+
+
