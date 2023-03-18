@@ -136,7 +136,7 @@
     $Legal = New-Object System.Windows.Forms.Label
     $Legal.Location = New-Object System.Drawing.Point(50,400)
     $Legal.Size = New-Object System.Drawing.Size(1000,20)
-    $Legal.Text = 'Created by Dub Mak. Software is provided "as is," without warranty of any kind, express or implied. User assumes all risk. makawide@gmail.com'
+    $Legal.Text = 'Created by Dub Mak. Software is provided "as is," without warranty of any kind, express or implied. User assumes all risk.'
 
 
 
