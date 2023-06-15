@@ -18,5 +18,5 @@ Step 5 - Press process and enjoy.
 
 Created by Dub Mak. Software is provided "as is," without warranty of any kind, express or implied. User assumes all risk. 
 
-Compiled Windows installer and video walkthrough can be found here: https://drive.google.com/drive/folders/1pATkPAaWMVdMY0UE-zHHHLsYvWxGq3xp?usp=share_link
+
 
